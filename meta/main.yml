@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: cnstechnicalgroup
+  description: This role applies custom configuration to stock php7-fpm install and configures custom pool config for site (Debian).
+  company: CNS Technical Group, Inc.
+  license: GPL2
+  min_ansible_version: 1.8
+  categories:
+  - web
+dependencies: []

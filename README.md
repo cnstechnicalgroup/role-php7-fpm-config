@@ -1,7 +1,7 @@
 Role: cns.php-fpm
 ========
 
-This role applies custom configuration to stock php7-fpm install (Debian).
+This role applies custom configuration to stock php7-fpm install and configures custom pool config for site (Debian).
 
 Requirements
 ------------
@@ -11,7 +11,15 @@ Nothing, it runs out of the box.
 Role Variables
 --------------
 
-None.
+In the current version, you can specify the following variables:
+
+| Name                  | Default |                                                              |
+|-----------------------|---------|--------------------------------------------------------------|
+| web_root              |   ---   | Main root for prestashop install.  (full system path)        |
+| web_folder            |   ---   | Site folder name. (not full path)                            |
+| site_public_url       |   ---   | Site URL. The primary site URL.                              |
+| phpfpm_process_user   |   ---   | php-fpm process owner.                                       |
+| phpfpm_process_group  |   ---   | php-fpm process group.                                       |
 
 Dependencies
 ------------
