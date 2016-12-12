@@ -1,4 +1,4 @@
-Role: cns.php-fpm
+Role: cns.php7-fpm-config
 ========
 
 This role applies custom configuration to stock php7-fpm install and configures custom pool config for site (Debian).
