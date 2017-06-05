@@ -1,23 +1,47 @@
 ---
 - name: Use default upload_tmp_dir in php.ini
-  replace: dest=/etc/php/7.0/fpm/php.ini regexp='^upload_tmp_dir.*$' replace='; upload_tmp_dir = /php/cache/upload_tmp' backup=yes
+  replace:
+    dest: "{{ php_fpm_path }}/php.ini"
+    regexp: '^upload_tmp_dir.*$'
+    replace: '; upload_tmp_dir = /php/cache/upload_tmp'
+    backup: yes
   notify: restart php-fpm
 
 - name: Set allow_url_fopen in php.ini
-  replace: dest=/etc/php/7.0/fpm/php.ini regexp='^allow_url_fopen.*$' replace='allow_url_fopen = On' backup=yes
+  replace:
+    dest: "{{ php_fpm_path }}/php.ini"
+    regexp: '^allow_url_fopen.*$'
+    replace: 'allow_url_fopen = On'
+    backup: yes
   notify: restart php-fpm
 
 - name: Enable proc_open for dev only
-  lineinfile: dest=/etc/php/7.0/fpm/php.ini
-              regexp='disable_functions(\s)?='
-              line='disable_functions=exec,passthru,system'
+  lineinfile:
+    dest: "{{ php_fpm_path }}/php.ini"
+    regexp: 'disable_functions(\s)?='
+    line: 'disable_functions=exec,passthru,system'
   when: mode == 'dev'
   notify: restart php-fpm
 
+- name: Disable functions from php_disabled_functions
+  lineinfile:
+    dest: "{{ php_fpm_path }}/php.ini"
+    regexp: 'disable_functions(\s)?='
+    line: "disable_functions={{ php_disabled_functions }}"
+    backrefs: yes
+  when: php_disabled_functions is defined
+  notify: restart php-fpm
+
 - name: Enable include path for dev only
-  replace: dest=/etc/php/7.0/fpm/php.ini regexp='^include_path.*$' replace='include_path = "."' backup=yes
+  replace:
+    dest: "{{ php_fpm_path }}/php.ini"
+    regexp: '^include_path.*$'
+    replace: 'include_path = "."'
+    backup: yes
   notify: restart php-fpm
 
 - name: Copy php-fpm configuration
-  template: src=site.conf.j2 dest="/etc/php/7.0/fpm/pool.d/{{ web_folder }}.conf"
+  template:
+    src: site.conf.j2
+    dest: "{{ php_fpm_path }}/pool.d/{{ web_folder }}.conf"
   notify: restart php-fpm
